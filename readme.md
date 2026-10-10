@@ -1,5 +1,8 @@
 # Holy Matrixmony
 
+original game: https://cegexe.itch.io/holymatrixmony
+
+
 ## Getting started
 
 Useful scripts:
