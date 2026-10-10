@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import"],
+  "options": {
+    "typeAware": true
+  },
+  "categories": {},
+  "env": {
+    "builtin": true
+  },
+  "ignorePatterns": ["node_modules/", "dist/"]
+}

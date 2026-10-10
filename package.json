@@ -1,0 +1,27 @@
+{
+  "name": "holy-matrixmony",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bunx --bun vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
+  },
+  "dependencies": {
+    "@spud.gg/api": "0.0.32"
+  },
+  "devDependencies": {
+    "oxfmt": "0.62.0",
+    "oxlint": "1.77.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "sharp": "0.35.5",
+    "svgo": "4.1.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "vite-plugin-image-optimizer": "2.0.3"
+  }
+}
