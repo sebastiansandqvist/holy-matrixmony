@@ -18,7 +18,6 @@ const EntityType = {
   Wall: "wall",
   Piece: "piece",
   Goal: "goal",
-  // None: "none",
 } as const;
 
 type EntityType = (typeof EntityType)[keyof typeof EntityType];
@@ -27,8 +26,7 @@ type ParsedEntity = {
   entity: EntityType;
   x: number;
   y: number;
-  ax: number;
-  ay: number;
+  id: number;
 };
 
 const entityByChar: Record<string, Pick<ParsedEntity, "entity">> = {
@@ -38,6 +36,8 @@ const entityByChar: Record<string, Pick<ParsedEntity, "entity">> = {
   g: { entity: "goal" },
 };
 
+let nextEntityId = 0;
+
 export function parseLevel(level: string) {
   const entities: ParsedEntity[] = [];
   const lines = level.split("\n");
@@ -45,7 +45,8 @@ export function parseLevel(level: string) {
     for (const [x, char] of line.split("").entries()) {
       const parsed = entityByChar[char];
       if (parsed) {
-        entities.push({ ...parsed, x, y, ax: x, ay: y });
+        const id = nextEntityId++;
+        entities.push({ ...parsed, x, y, id });
       }
     }
   }
@@ -57,6 +58,8 @@ export function parseLevel(level: string) {
     entities,
   };
 }
+
+export type Level = ReturnType<typeof parseLevel>;
 
 const alphabet = "0123456789abcdefghikjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~_";
 
@@ -117,8 +120,7 @@ export function decode(input: string) {
 
   const entities = simpleEntities.map((entity) => ({
     ...entity,
-    ax: entity.x,
-    ay: entity.y,
+    id: nextEntityId++,
   }));
 
   return {

@@ -24,6 +24,17 @@ export function fixedUpdate(state: State, dt: number) {
     attempted.y -= 1;
   }
 
+  if (keyboard.justPressed("r")) {
+  }
+
+  if (keyboard.justPressed("u")) {
+    console.log("u");
+    const historyItem = state.history.pop();
+    if (historyItem) {
+      state.level = historyItem;
+    }
+  }
+
   let valid = true;
 
   for (const player of players) {
@@ -37,7 +48,10 @@ export function fixedUpdate(state: State, dt: number) {
     }
   }
 
-  if (valid) {
+  if (valid && (attempted.x != 0 || attempted.y != 0)) {
+    state.history.push(structuredClone(state.level));
+    console.log(state.history);
+
     players.forEach((player) => {
       player.x += attempted.x;
       player.y += attempted.y;
@@ -72,8 +86,13 @@ export function fixedUpdate(state: State, dt: number) {
 
 export function update(state: State, dt: number) {
   for (const entity of state.level.entities) {
-    entity.ax = decay(entity.ax, entity.x, 20, dt);
-    entity.ay = decay(entity.ay, entity.y, 20, dt);
+    const animation = state.animations.get(entity.id);
+    if (animation) {
+      animation.x = decay(animation.x, entity.x, 20, dt);
+      animation.y = decay(animation.y, entity.y, 20, dt);
+    } else {
+      state.animations.set(entity.id, { x: entity.x, y: entity.y });
+    }
   }
 }
 
@@ -88,8 +107,9 @@ export function render(state: State, ctx: CanvasRenderingContext2D) {
     const gridPixelSize = 20;
 
     for (const entity of state.level.entities) {
-      const x = entity.ax * gridPixelSize;
-      const y = entity.ay * gridPixelSize;
+      const location = state.animations.get(entity.id) ?? entity;
+      const x = location.x * gridPixelSize;
+      const y = location.y * gridPixelSize;
 
       const EntityToColorMap = {
         player: "green",

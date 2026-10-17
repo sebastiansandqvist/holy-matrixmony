@@ -28,9 +28,28 @@ if (levelQueryParam) {
   const editor = document.createElement("textarea");
   editor.style.width = "90vw";
   editor.style.height = "80vh";
-  const output = document.createElement("output");
+  const output = document.createElement("input");
+  output.style.width = "90vw";
+  const openButton = document.createElement("button");
+  openButton.textContent = "Open";
+
   document.body.appendChild(editor);
   document.body.appendChild(output);
+  document.body.appendChild(openButton);
+
+  const getUrl = () => {
+    const encoded = encode(parseLevel(editor.value));
+    const url = window.location.origin;
+    return `${url}?level=${encoded}`;
+  };
+
+  const updateUrlText = () => {
+    output.value = getUrl();
+  };
+
+  openButton.onclick = () => {
+    window.open(getUrl());
+  };
 
   //   editor.value = `
   // ##########
@@ -54,12 +73,6 @@ if (levelQueryParam) {
 #                       #
 #########################
 `.trim();
-
-  const updateUrlText = () => {
-    const encoded = encode(parseLevel(editor.value));
-    const url = window.location.origin;
-    output.textContent = `${url}?level=${encoded}`;
-  };
 
   updateUrlText();
 
