@@ -5,7 +5,7 @@ import { render, update, fixedUpdate } from "./gameplay";
 import { state } from "./state";
 import { encode, exampleLevel, parseLevel } from "./levels";
 
-if (state.isEditorMode) {
+if (state.mode === 'edit') {
   const getUrl = () => {
     const encoded = encode(parseLevel(editor.value));
     const url = window.location.origin;

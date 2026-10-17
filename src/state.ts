@@ -1,11 +1,13 @@
 import { createBounds } from "./canvas";
 import { decode, encode, exampleLevel, Level, parseLevel } from "./levels";
 
-const levelQueryParam = new URLSearchParams(window.location.search).get("level");
-const level = decode(levelQueryParam ?? encode(parseLevel(exampleLevel)));
+const params = new URLSearchParams(window.location.search);
+const levelQueryParam = params.get("level");
+const level = decode(levelQueryParam ?? encode(parseLevel(exampleLevel)))
+const mode = params.get('edit') ? 'edit' as const : levelQueryParam ? 'level' as const : 'campaign' as const;
 
 export const state = {
-  isEditorMode: !levelQueryParam,
+  mode,
   elapsedSeconds: 0,
   bounds: createBounds(),
   initialLevel: structuredClone(level),
@@ -13,6 +15,7 @@ export const state = {
   won: false,
   history: [] as Level[],
   animations: new Map<number, { x: number; y: number }>(),
+  campaign: [],
 };
 
 export type State = typeof state;
