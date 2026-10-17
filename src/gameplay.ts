@@ -25,10 +25,11 @@ export function fixedUpdate(state: State, dt: number) {
   }
 
   if (keyboard.justPressed("r")) {
+    state.level = structuredClone(state.initialLevel);
+    state.history = [];
   }
 
   if (keyboard.justPressed("u")) {
-    console.log("u");
     const historyItem = state.history.pop();
     if (historyItem) {
       state.level = historyItem;
@@ -50,7 +51,6 @@ export function fixedUpdate(state: State, dt: number) {
 
   if (valid && (attempted.x != 0 || attempted.y != 0)) {
     state.history.push(structuredClone(state.level));
-    console.log(state.history);
 
     players.forEach((player) => {
       player.x += attempted.x;
