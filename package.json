@@ -12,7 +12,7 @@
     "fmt:check": "oxfmt --check"
   },
   "dependencies": {
-    "@spud.gg/api": "0.0.32"
+    "@spud.gg/api": "0.0.33"
   },
   "devDependencies": {
     "oxfmt": "0.62.0",

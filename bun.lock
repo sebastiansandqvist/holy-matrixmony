@@ -5,7 +5,7 @@
     "": {
       "name": "holy-matrixmony",
       "dependencies": {
-        "@spud.gg/api": "0.0.32",
+        "@spud.gg/api": "0.0.33",
       },
       "devDependencies": {
         "oxfmt": "0.62.0",
@@ -198,7 +198,7 @@
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.1", "", {}, "sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw=="],
 
-    "@spud.gg/api": ["@spud.gg/api@0.0.32", "", {}, "sha512-nIj4yZVBDNh5pd3IzwTogTbYC8NnIrPbJWkWGgXn1xERRWRYeOrLfw013TCAHQGWdlJ53VzUF8Yb4Iw67GypLg=="],
+    "@spud.gg/api": ["@spud.gg/api@0.0.33", "", {}, "sha512-7F2bOeYuZMS42p6ttt++i0mUhUjGujA2t3AHhYspG0UlcO/UcH+jRL6oAUx71JN1tksyDSwxSS7ZWhBaFMcNXQ=="],
 
     "@typescript/typescript-aix-ppc64": ["@typescript/typescript-aix-ppc64@7.0.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ=="],
 

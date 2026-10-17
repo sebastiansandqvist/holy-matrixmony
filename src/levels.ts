@@ -58,8 +58,6 @@ export function parseLevel(level: string) {
   };
 }
 
-const example = parseLevel(exampleLevel);
-
 const alphabet = "0123456789abcdefghikjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~_";
 
 function toOneBase64(position: number) {
