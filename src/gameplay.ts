@@ -1,18 +1,38 @@
 import type { State } from "./state";
-import { keyboard } from "@spud.gg/api";
+import { keyboard, gamepads, Button } from "@spud.gg/api";
 import { decay } from "./helpers";
 
+function updateLevel(state: State) {
+  state.level = structuredClone(state.campaign[state.campaignIndex]!);
+  state.initialLevel = structuredClone(state.campaign[state.campaignIndex]!);
+  state.history = [];
+}
+
 export function fixedUpdate(state: State, dt: number) {
+  if (!state.initialized) {
+    if (state.mode === 'campaign') {
+      updateLevel(state);
+    }
+    state.initialized = true;
+  }
+
+  const motion = gamepads.singlePlayer.leftStick.motion();
   const players = state.level.entities.filter(({ entity }) => entity === "player");
   const walls = state.level.entities.filter(({ entity }) => entity === "wall");
 
   const attempted = { x: 0, y: 0 };
+  const movement = {
+    left:  keyboard.justPressed("ArrowLeft") || keyboard.justPressed('w') || gamepads.singlePlayer.justPressed(Button.DpadLeft) || motion.justMoved.Left,
+    right:  keyboard.justPressed("ArrowRight") || keyboard.justPressed('d') || gamepads.singlePlayer.justPressed(Button.DpadRight) || motion.justMoved.Right,
+    up:  keyboard.justPressed("ArrowUp") || keyboard.justPressed('w') || gamepads.singlePlayer.justPressed(Button.DpadUp) || motion.justMoved.Up,
+    down:  keyboard.justPressed("ArrowDown") || keyboard.justPressed('s') || gamepads.singlePlayer.justPressed(Button.DpadDown) || motion.justMoved.Down,
+  };
 
-  if (keyboard.justPressed("ArrowLeft")) {
+  if (movement.left) {
     attempted.x -= 1;
   }
 
-  if (keyboard.justPressed("ArrowRight")) {
+  if (movement.right) {
     attempted.x += 1;
   }
 
@@ -74,14 +94,16 @@ export function fixedUpdate(state: State, dt: number) {
     });
   }
 
-  // win
-  {
-    const players = state.level.entities.filter(({ entity }) => entity === "player");
-    const goals = state.level.entities.filter(({ entity }) => entity === "goal");
-    state.won = goals.every((goal) => players.find(({ x, y }) => x === goal.x && y === goal.y));
+  const goals = state.level.entities.filter(({ entity }) => entity === "goal");
+  const won = goals.every((goal) => players.find(({ x, y }) => x === goal.x && y === goal.y));
+  if (won && state.mode === 'campaign') {
+    // TODO: transition to win animation
+    state.campaignIndex++;
+    updateLevel(state);
   }
 
   keyboard.clearInputs();
+  gamepads.clearInputs();
 }
 
 export function update(state: State, dt: number) {
@@ -122,7 +144,11 @@ export function render(state: State, ctx: CanvasRenderingContext2D) {
       ctx.fillRect(x, y, gridPixelSize, gridPixelSize);
     }
 
-    if (state.won) {
+
+    const players = state.level.entities.filter(({ entity }) => entity === "player");
+    const goals = state.level.entities.filter(({ entity }) => entity === "goal");
+    const won = goals.every((goal) => players.find(({ x, y }) => x === goal.x && y === goal.y));
+    if (won) {
       ctx.font = "100px sans-serif";
       ctx.fillText("you win!", 100, 100);
     }
