@@ -10,7 +10,7 @@ function updateLevel(state: State) {
 
 export function fixedUpdate(state: State, dt: number) {
   if (!state.initialized) {
-    if (state.mode === 'campaign') {
+    if (state.mode === "campaign") {
       updateLevel(state);
     }
     state.initialized = true;
@@ -22,34 +22,39 @@ export function fixedUpdate(state: State, dt: number) {
 
   const attempted = { x: 0, y: 0 };
   const movement = {
-    left:  keyboard.justPressed("ArrowLeft") || keyboard.justPressed('w') || gamepads.singlePlayer.justPressed(Button.DpadLeft) || motion.justMoved.Left,
-    right:  keyboard.justPressed("ArrowRight") || keyboard.justPressed('d') || gamepads.singlePlayer.justPressed(Button.DpadRight) || motion.justMoved.Right,
-    up:  keyboard.justPressed("ArrowUp") || keyboard.justPressed('w') || gamepads.singlePlayer.justPressed(Button.DpadUp) || motion.justMoved.Up,
-    down:  keyboard.justPressed("ArrowDown") || keyboard.justPressed('s') || gamepads.singlePlayer.justPressed(Button.DpadDown) || motion.justMoved.Down,
+    left:
+      keyboard.justPressed("ArrowLeft") ||
+      keyboard.justPressed("w") ||
+      gamepads.singlePlayer.justPressed(Button.DpadLeft) ||
+      motion.justMoved.Left,
+    right:
+      keyboard.justPressed("ArrowRight") ||
+      keyboard.justPressed("d") ||
+      gamepads.singlePlayer.justPressed(Button.DpadRight) ||
+      motion.justMoved.Right,
+    up:
+      keyboard.justPressed("ArrowUp") ||
+      keyboard.justPressed("w") ||
+      gamepads.singlePlayer.justPressed(Button.DpadUp) ||
+      motion.justMoved.Up,
+    down:
+      keyboard.justPressed("ArrowDown") ||
+      keyboard.justPressed("s") ||
+      gamepads.singlePlayer.justPressed(Button.DpadDown) ||
+      motion.justMoved.Down,
   };
 
-  if (movement.left) {
-    attempted.x -= 1;
-  }
+  if (movement.left) attempted.x -= 1;
+  if (movement.right) attempted.x += 1;
+  if (movement.down) attempted.y += 1;
+  if (movement.up) attempted.y -= 1;
 
-  if (movement.right) {
-    attempted.x += 1;
-  }
-
-  if (keyboard.justPressed("ArrowDown")) {
-    attempted.y += 1;
-  }
-
-  if (keyboard.justPressed("ArrowUp")) {
-    attempted.y -= 1;
-  }
-
-  if (keyboard.justPressed("r")) {
+  if (keyboard.justPressed("r") || gamepads.singlePlayer.justPressed(Button.Select)) {
     state.level = structuredClone(state.initialLevel);
     state.history = [];
   }
 
-  if (keyboard.justPressed("u")) {
+  if (keyboard.justPressed("u") || gamepads.singlePlayer.justPressed(Button.North)) {
     const historyItem = state.history.pop();
     if (historyItem) {
       state.level = historyItem;
@@ -96,7 +101,7 @@ export function fixedUpdate(state: State, dt: number) {
 
   const goals = state.level.entities.filter(({ entity }) => entity === "goal");
   const won = goals.every((goal) => players.find(({ x, y }) => x === goal.x && y === goal.y));
-  if (won && state.mode === 'campaign') {
+  if (won && state.mode === "campaign") {
     // TODO: transition to win animation
     state.campaignIndex++;
     updateLevel(state);
@@ -143,7 +148,6 @@ export function render(state: State, ctx: CanvasRenderingContext2D) {
       ctx.fillStyle = EntityToColorMap[entity.entity];
       ctx.fillRect(x, y, gridPixelSize, gridPixelSize);
     }
-
 
     const players = state.level.entities.filter(({ entity }) => entity === "player");
     const goals = state.level.entities.filter(({ entity }) => entity === "goal");
