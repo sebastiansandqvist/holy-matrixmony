@@ -56,9 +56,7 @@ export function fixedUpdate(state: State, dt: number) {
 
   if (keyboard.justPressed("u") || gamepads.singlePlayer.justPressed(Button.North)) {
     const historyItem = state.history.pop();
-    if (historyItem) {
-      state.level = historyItem;
-    }
+    if (historyItem) state.level = historyItem;
   }
 
   let valid = true;
